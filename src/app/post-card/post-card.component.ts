@@ -11,7 +11,9 @@ export class PostCardComponent implements OnInit {
 
   @Input() post: BlogPost;
 
-  constructor() { }
+  constructor() { 
+    this.post = new BlogPost();
+  }
 
   ngOnInit(): void {
     
