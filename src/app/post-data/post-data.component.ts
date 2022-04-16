@@ -13,6 +13,9 @@ export class PostDataComponent implements OnInit {
   querySub : any;
   post: BlogPost;
 
+  commentName : string;
+  commentText : string;
+
   constructor(
     private _postService : PostService,
     private route : ActivatedRoute  
@@ -20,11 +23,23 @@ export class PostDataComponent implements OnInit {
 
   ngOnInit(): void {
     this.querySub = this.route.params.subscribe(params =>{
-      //TODO: Get post by Id params['id'] and store the result in this.post
-      this._postService.getPostById(params['id']).subscribe(po =>{
-        this.post = po;
+      this._postService.getPostById(params['id']).subscribe(post =>{
+        this.post = post;
       })
-     })
+    })
+  }
+
+  submitComment(){
+    this.post.comments.push({
+      author: this.commentName,
+      comment: this.commentText,
+      date : new Date().toLocaleDateString()
+    });
+
+    this._postService.updatePostById(this.post._id, this.post).subscribe(post => {
+      this.commentName = "";
+      this.commentText = "";
+    });
   }
 
   ngOnDestroy(){
